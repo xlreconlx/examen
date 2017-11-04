@@ -1,0 +1,242 @@
+<!doctype html>
+<html ng-app="Examen" lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="todo.js"></script>
+    <link rel="stylesheet" href="todo.css">
+     <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script type="text/javascript">
+       $(document).ready(function(){
+    // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+    $('.modal').modal();
+    $('ul.tabs').tabs();
+  });
+    </script>
+  </head>
+  <body ng-controller="ExamenController as examen">
+    <center ng-if="session">
+      <div class="section"></div>
+      <h5 class="indigo-text">Por favor ingrese con su cuenta</h5>
+<br>
+      <div class="container">
+        <div class="z-depth-4 grey lighten-4 row contenedor" >
+          <form class="col s12">
+          {{error}}
+             <div class="row">
+             <div class="input-field col s12">
+               <input id="email" type="email" class="validate" ng-model="user.email">
+                <label for="email">Correo Electronico</label>
+            </div>
+              <div class="input-field col s12">
+                <input id="password" type="password" class="validate" ng-model="user.password" />
+                <label for="password">Contraseña</label>
+              </div>
+            </div>
+            <br />
+            <center>
+              <div class="row">
+                <button ng-click="ingresar()" type="submit" class="col s12 btn btn-large waves-effect indigo">Ingresar</button>
+              </div>
+            </center>
+          </form>
+        </div>
+      </div>
+    </center>
+    <div ng-if="!session">
+       <nav>
+    <div class="nav-wrapper black">
+      <a href="#" class="brand-logo">Bienvenido</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a>{{user.email}}</a></li>
+        <li><a ng-click="salir()">Salir</a></li>
+      </ul>
+    </div>
+    </nav>
+
+  <div class="container">
+  <br>
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li ng-if="user.idRol==1" class="tab col s4"><a href="#test1">Usuarios</a></li>
+        <li class="tab col s4"><a href="#test2">Categorias</a></li>
+        <li class="tab col s4"><a href="#test3">Productos</a></li>
+      </ul>
+    </div>
+    <div ng-if="user.idRol==1" id="test1" class="col s12">
+      <br>
+     <table class="striped">
+        <thead>
+          <tr>
+              <th>Id</th>
+              <th>Correo</th>
+              <th>Rol</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr ng-repeat="x in usuarios">
+            <td>{{x.id}}</td>
+            <td>{{x.email}}</td>
+            <td>{{x.nombreRol}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+    <div id="test2" class="col s12">
+      <br>
+     <table class="striped">
+        <thead>
+          <tr>
+              <th>Id Categoria</th>
+              <th>Nombre</th>
+           </tr>
+        </thead>
+
+        <tbody>
+          <tr ng-repeat="x in categorias">
+            <td>{{x.idcategoria}}</td>
+            <td>{{x.nombre}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <a style="float:right;" class="waves-effect btn modal-trigger indigo" href="#modal1">Registrar Categoria</a>
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Registro de Categoria</h4>
+      <form>
+       <div class="row">
+             <div class="input-field col s12">
+               <input id="categoria" type="text" class="validate" ng-model="categoriaText.nombre">
+                <label for="categoria">Nombre Categoria</label>
+            </div>
+            </div>
+      </form>
+    </div>
+     <div class="modal-footer">
+      <a href="#!" ng-click="registraCategoria()" class="waves-effect btn modal-close indigo">Registrar</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancelar</a>
+    </div>
+  </div>
+    </div>
+    <div id="test3" class="col s12">
+      
+ <br>
+     <table class="striped">
+        <thead>
+          <tr>
+              <th>Id Producto</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Categoria</th>
+              <th>Eliminar</th>
+              <th>Editar</th>
+           </tr>
+        </thead>
+
+        <tbody>
+          <tr ng-repeat="x in productos">
+            <td>{{x.idproductos}}</td>
+            <td>{{x.nombre}}</td>
+            <td>{{x.descripcion}}</td>
+            <td>$ {{x.costo}}</td>
+            <td>{{x.idcategoria.nombre}}</td>
+            <td> 
+            <a href="#!" ng-click="eliminaProducto(x.idproductos)" class="waves-effect btn deep-orange">Eliminar</a>
+           </td>
+           <td>
+              <a href="#modal3" ng-click="cargaProducto(x)" class="waves-effect btn indigo modal-trigger">Editar</a>
+          </td>
+           
+    
+          </tr>
+        </tbody>
+      </table>
+      <br>
+     
+   <a style="float:right;" class="waves-effect btn modal-trigger indigo" href="#modal2">Registrar Producto</a>
+   <br>
+  <!-- Modal Structure -->
+  <div id="modal2" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Registro de Producto</h4>
+      <form>
+       <div class="row">
+             <div class="input-field col s6">
+               <input id="nombre" type="text" class="validate" ng-model="newProducto.nombre">
+                <label for="nombre">Nombre Producto</label>
+            </div>
+             <div class="input-field col s6">
+               <input id="descrip" type="text" class="validate" ng-model="newProducto.descripcion">
+                <label for="descrip">Descripción</label>
+            </div>
+             <div class="input-field col s6">
+               <input id="costo" type="text" class="validate" ng-model="newProducto.costo">
+                <label for="costo">Costo</label>
+            </div>
+              <select class="browser-default col s6" name="repeatSelect" id="repeatSelect" ng-model="newProducto.idcategoria.idcategoria">
+                 <option value="" disabled selected>Escoja Una Categoria</option>
+                 <option ng-repeat="option in categorias" value="{{option.idcategoria}}">{{option.nombre}}</option>
+               </select>
+       
+            </div>
+      </form>
+    </div>
+     <div class="modal-footer">
+      <a href="#!" ng-click="registraProducto()" class="waves-effect btn modal-close indigo">Registrar</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancelar</a>
+    </div>
+  </div>
+
+    <div id="modal3" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Actualizar Producto</h4>
+      <form>
+       <div class="row">
+             <div class="input-field col s6">
+               <input placeholder="Nombre Producto" id="nombre" type="text" class="validate" ng-model="productoSeleccionado.nombre">
+            </div>
+             <div class="input-field col s6">
+               <input placeholder="Descripción" id="descrip" type="text" class="validate" ng-model="productoSeleccionado.descripcion">
+            </div>
+             <div class="input-field col s6">
+               <input placeholder="Costo" id="costo" type="text" class="validate" ng-model="productoSeleccionado.costo">
+            </div>
+             <select class="browser-default col s6" name="repeatSelect" id="repeatSelect" ng-model="productoSeleccionado.idcategoria.idcategoria">
+                 <option value="" disabled selected>Escoja Una Categoria</option>
+                 <option ng-repeat="option in categorias" value="{{option.idcategoria}}">{{option.nombre}}</option>
+             </select>
+             </div>
+      </form>
+    </div>
+     <div class="modal-footer">
+      <a href="#!" ng-click="actualizaProducto()" class="waves-effect btn modal-close indigo">Actualizar</a>
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Cancelar</a>
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+
+   </div>
+
+  </div>
+
+
+
+  
+
+  </body>
+</html>
